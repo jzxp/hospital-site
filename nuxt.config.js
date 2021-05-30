@@ -37,6 +37,20 @@ module.exports = {
   },
   plugins:[
     { src: '~/plugins/plugin.js', ssr: false }
-  ]
+  ],
+  axios: {
+    prefix: '/api',
+    proxy: true,
+  },
+  proxy: { //配置代理服务器来解决跨域问题
+    "/api" : {
+        target: 'http://localhost:7610/', //配置要替换的后台接口地址
+        ws: true,
+        changOrigin: true, //配置允许改变Origin
+        pathRewrite: {
+            "^/api": " "
+        }
+    }
+}
 }
 
