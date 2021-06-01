@@ -39,7 +39,7 @@
                   class="item v-link clickable"
                   v-for="(item, index) in hostypeList"
                   :key="index"
-                  @click="hpTypeSelect(item.value,index)"
+                  @click="hpTypeSelect(item.dictName,index)"
                 >
                   {{ item.name }}
                   {{item.dictName }}
@@ -277,30 +277,37 @@ export default {
     },
 
     //查询医院列表
-    async getList() {
-       const result = await getPageList(this.pageBody, this.searchObj)
-        .then((response) => {
-          console.log("sajkdnakjsndkj")
-          console.log(response);
-          console.log(response.data);
-          for (let i in response.data.data.records) {
+   getList() {
+     console.log("行不行？？？？？")
+      console.log(this.searchObj.hpType)
+      // axios.post("http://localhost:7610/admin/hospital/hospitalSet/list/page",{
+      // method:"post",
+      // contentType: "application/json;charset=utf-8",
+      //   // pageBody : this.pageBody,
+      //   hospitalSelectVo : this.searchObj
+      
+      // })
+      hospitalApi.getPageList(this.pageBody,this.searchObj).then(response => {
+        console.log("执行了getList方法")
+        console.log(response.data)
+        for (let i in response.data.data.records) {
             this.list.push(response.data.data.records[i]);
           }
           this.pageBody.pageNum = response.data.data.pages;
         })
         .catch((e) => {
-          // console.log(e);
+          console.log(e);
         });
-        console.log(result)
     },
 
     //根据医院等级查询
     hpTypeSelect(hpType, index) {
+      console.log("调用了·hpTypeSelect")
       //准备数据
       this.list = [];
       this.pageBody.pageNum = 1;
       this.hostypeActiveIndex = index;
-      this.pageBody.searchObj.hpType = hpType;
+      this.searchObj.hpType = hpType;
       //调用查询医院列表方法
       this.getList();
     },
@@ -310,7 +317,7 @@ export default {
       this.list = [];
       this.pageBody.pageNum = 1;
       this.provinceActiveIndex = index;
-      this.pageBody.searchObj.districtCode = districtCode;
+      this.searchObj.districtCode = districtCode;
       this.getList();
     },
 
